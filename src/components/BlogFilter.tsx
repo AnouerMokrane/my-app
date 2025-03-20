@@ -1,12 +1,20 @@
+import { getPosts } from "@/lib/actions";
+import { BlogPost } from "@/lib/types";
 import Link from "next/link";
 import React from "react";
-import { blog_data } from "../../public/Assets/assets";
 
-export default function BlogFilter({
+export default async function BlogFilter({
   currentCategory,
 }: {
   currentCategory: string;
 }) {
+  const data = await getPosts();
+
+  if (!data.success) {
+    return <h1>No Posts Found</h1>;
+  }
+
+  const blog_data: BlogPost[] = data?.data || [];
   const categories = [
     "All",
     ...new Set(blog_data.map((blog) => blog.category)),
