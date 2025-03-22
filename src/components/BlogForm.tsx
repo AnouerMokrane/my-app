@@ -78,7 +78,7 @@ export default function BlogForm() {
   const [, formAction, isPending] = useActionState(handleSubmit, null);
 
   return (
-    <form action={formAction} className="space-y-4">
+    <form action={formAction} className="space-y-4 pb-22">
       <div>
         <p className="block text-md mb-2">Upload thumbnail</p>
         <label htmlFor="image" className="block w-34 cursor-pointer">

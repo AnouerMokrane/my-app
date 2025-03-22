@@ -25,6 +25,7 @@ export default function Header() {
         </Link>
         <Link
           href={"/admin"}
+          target="_blank"
           className="flex items-center gap-3 font-medium py-2 px-3 border border-black cursor-pointer sm:px-6 sm:py-3 shadow-custom"
         >
           Get started <Image src={assets.arrow} alt="" />

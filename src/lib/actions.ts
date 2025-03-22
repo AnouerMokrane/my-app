@@ -1,4 +1,5 @@
 "use server";
+import { revalidatePath } from "next/cache";
 import { connectDB } from "./dbConnect";
 import { Post } from "./models/PostModel";
 import { Subscription } from "./models/SubscriptionModel";
@@ -71,29 +72,16 @@ export const updatePost = async (id: string, post: BlogPost) => {
   }
 };
 
-export const deletePost = async (id: string) => {
-  connectDB();
-
-  try {
-    await Post.findOneAndDelete({ _id: id });
-
-    return {
-      success: true,
-      message: "Post deleted successfully",
-    };
-  } catch (error) {
-    console.error("Error deleting post: ", error);
-    return {
-      success: false,
-      message: "Error deleting post",
-    };
-  }
+export const deletePost = async (formData: FormData) => {
+  const id = formData.get("id") as string;
+  console.log("id", id);
 };
 export const subscribe = async (email: string) => {
   await connectDB();
 
   try {
     await Subscription.create({ email });
+
     return {
       success: true,
       message: "Subscribed successfully",
@@ -122,5 +110,17 @@ export const getSubscriptions = async () => {
       success: false,
       message: "Error getting subscriptions",
     };
+  }
+};
+
+export const deleteSubscription = async (formData: FormData): Promise<void> => {
+  const email = formData.get("email");
+  await connectDB();
+  try {
+    await Subscription.findOneAndDelete({ email: email });
+    revalidatePath("admin/subscriptions");
+    revalidatePath("/");
+  } catch (error) {
+    console.error(error);
   }
 };

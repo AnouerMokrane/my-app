@@ -20,7 +20,7 @@ export default async function BlogFilter({
     ...new Set(blog_data.map((blog) => blog.category)),
   ];
   return (
-    <div className="flex justify-center items-center gap-2">
+    <div className="flex items-center gap-2 max-w-3xl overflow-x-auto py-2 px-4 custom-scrollbar mx-auto ">
       {categories.map((cat, index) => (
         <Link
           key={index}

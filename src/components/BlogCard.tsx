@@ -27,7 +27,7 @@ export default function BlogCard({
         alt={blog_data.title}
         width={500}
         height={300}
-        className="w-auto h-auto border-b border-black"
+        className="w-full h-[200px] object-cover border-b border-black"
       />
       <div className="p-5">
         <span className="text-white text-sm bg-black px-2 py-1 rounded-sm ">

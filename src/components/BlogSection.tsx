@@ -5,12 +5,19 @@ import BlogFilter from "./BlogFilter";
 export default async function BlogSection({ category }: { category: string }) {
   const data = await getPosts();
 
-  if (!data.success) {
-    return <h1>No Posts Found</h1>;
+  const filtredBlogs =
+    category === "All"
+      ? data?.data
+      : data?.data?.filter((blog) => blog.category === category);
+
+  if (!filtredBlogs?.length) {
+    return (
+      <div className="flex  justify-center h-[calc(100dvh-(150px+81px))] sm:h-[calc(100dvh-(150px+150px))]  text-xl text-gray-700 pt-28">
+        <div className="flex items-center justify-center h-[calc(100dvh-(150px+81px))] sm:h-[calc(100dvh-(150px+23px))]  text-xl text-gray-700 pt-28"></div>
+        Blog not found
+      </div>
+    );
   }
-
-  const filtredBlogs = data?.data?.filter((blog) => blog.category === category);
-
   return (
     <section className="container mx-auto py-12 max-xl:px-5">
       <BlogFilter currentCategory={category} />
