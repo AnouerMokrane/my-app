@@ -3,7 +3,7 @@ import BlogFilter from "./BlogFilter";
 import { BlogPost } from "@/lib/types";
 
 export default async function BlogSection({ category }: { category: string }) {
-  const res = await fetch("http://localhost:3000/api/posts", {
+  const res = await fetch("/api/posts", {
     next: {
       tags: ["posts"],
     },
