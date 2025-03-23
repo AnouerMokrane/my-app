@@ -1,28 +1,22 @@
 "use client";
 
 import { subscribe } from "@/lib/actions";
-import { ISUb } from "@/lib/types";
 import React, { useActionState } from "react";
 import { toast } from "react-toastify";
 
-export default function SubForm({ subs }: { subs: string }) {
+export default function SubForm() {
   const handleSubscribe = async (prevState: unknown, formData: FormData) => {
     const email = formData.get("email") as string;
 
-    const data = JSON.parse(subs);
-
-    const checkEmail = data.find((sub: ISUb) => sub.email === email);
-
-    if (checkEmail) {
-      toast.warn("Email Already Exist");
-    } else {
+    try {
       const res = await subscribe(email);
-
       if (res.success) {
         toast.success(res.message);
-      } else if (!res.success) {
+      } else {
         toast.error(res.message);
       }
+    } catch (error) {
+      console.log(error);
     }
   };
 

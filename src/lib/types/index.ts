@@ -1,5 +1,5 @@
 export type BlogPost = {
-  id?: number;
+  _id?: number;
   title: string;
   content: string;
   category: string;

@@ -1,8 +1,6 @@
-import { getSubscriptions } from "@/lib/actions";
 import SubForm from "./SubForm";
 
 export default async function Hero() {
-  const subs = await getSubscriptions();
   return (
     <section className="py-12 ">
       <div className="flex flex-col items-center px-4 max-w-7xl mx-auto">
@@ -12,7 +10,7 @@ export default async function Hero() {
           industry. Lorem Ipsum has been the industry&apos;s standard dummy text
           ever.
         </p>
-        <SubForm subs={JSON.stringify(subs.data)} />
+        <SubForm />
       </div>
     </section>
   );

@@ -1,14 +1,19 @@
-import { getPosts } from "@/lib/actions";
 import BlogCard from "./BlogCard";
 import BlogFilter from "./BlogFilter";
+import { BlogPost } from "@/lib/types";
 
 export default async function BlogSection({ category }: { category: string }) {
-  const data = await getPosts();
+  const res = await fetch("http://localhost:3000/api/posts", {
+    next: {
+      tags: ["posts"],
+    },
+  });
+  const posts: BlogPost[] = await res.json();
 
   const filtredBlogs =
     category === "All"
-      ? data?.data
-      : data?.data?.filter((blog) => blog.category === category);
+      ? posts
+      : posts.filter((blog) => blog.category === category);
 
   if (!filtredBlogs?.length) {
     return (
@@ -24,7 +29,7 @@ export default async function BlogSection({ category }: { category: string }) {
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 mt-12">
         {filtredBlogs?.map((blog) => (
-          <BlogCard key={blog.id} blog_data={blog} />
+          <BlogCard key={blog._id} blog_data={blog} />
         ))}
       </div>
     </section>

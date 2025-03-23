@@ -23,10 +23,10 @@ export default async function page({
 
   const blogDetails: BlogPost = data.data;
 
-  const htmlContent = marked.parse(blogDetails.content || "");
+  const htmlContent = marked.parse("");
 
   return (
-    <div>
+    <>
       <div className="bg-slate-200 py-24 pb-28">
         <div className="flex items-center text-center flex-col gap-4">
           <h1 className="max-w-xl text-2xl sm:text-4xl md:text-5xl md:max-w-3xl font-semibold">
@@ -72,6 +72,6 @@ export default async function page({
           </div>
         </div>
       </div>
-    </div>
+    </>
   );
 }

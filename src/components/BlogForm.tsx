@@ -5,14 +5,27 @@ import React, { useActionState, useState } from "react";
 import { assets } from "../../public/Assets/assets";
 import MDEditor from "@uiw/react-md-editor";
 
-import { createPost } from "@/lib/actions";
+import { createPost, updatePost } from "@/lib/actions";
 import { toast } from "react-toastify";
 import { useUser } from "@clerk/nextjs";
 
-export default function BlogForm() {
-  const [image, setImage] = useState<null | string>(null);
+export default function BlogForm({
+  id,
+  values,
+  type = "create",
+}: {
+  id?: string;
+  values?: string;
+  type?: "create" | "edit";
+}) {
+  const defaultValues = JSON.parse(values || "{}");
+  const [image, setImage] = useState<null | string>(
+    defaultValues?.image || null
+  );
   const [isUploading, setIsUploading] = useState(false);
-  const [value, setValue] = React.useState<string>("**Hello world!!!**");
+  const [value, setValue] = React.useState<string>(
+    defaultValues?.content || ""
+  );
 
   const { user } = useUser();
 
@@ -51,23 +64,38 @@ export default function BlogForm() {
 
       if (!user) return;
 
-      const res = await createPost({
-        title: formValues.title,
-        category: formValues.category,
-        image: formValues.image as string,
-        content: value,
-        date: Date.now(),
-        author: user.fullName as string,
-        author_img: user.imageUrl as string,
-      });
+      if (type === "create") {
+        const res = await createPost({
+          title: formValues.title,
+          category: formValues.category,
+          image: formValues.image as string,
+          content: value,
+          date: Date.now(),
+          author: user.fullName as string,
+          author_img: user.imageUrl as string,
+        });
 
-      if (res.success) {
-        toast.success(res.message);
-        setImage(null);
-        setValue("");
+        if (res.success) {
+          toast.success(res.message);
+        } else {
+          toast.error(res.message);
+        }
       } else {
-        toast.error(res.message);
-        setImage(null);
+        const res = await updatePost(id as string, {
+          title: formValues.title,
+          category: formValues.category,
+          image: formValues.image as string,
+          content: value,
+          date: Date.now(),
+          author: user.fullName as string,
+          author_img: user.imageUrl as string,
+        });
+
+        if (res.succuss) {
+          toast.success(res.message);
+        } else {
+          toast.error(res.message);
+        }
       }
     } catch (error) {
       setImage(null);
@@ -105,7 +133,7 @@ export default function BlogForm() {
           name="image"
           id="image"
           hidden
-          required
+          required={type === "create"}
           disabled={isUploading}
           onChange={handleImageChange}
         />
@@ -118,7 +146,7 @@ export default function BlogForm() {
           type="text"
           id="title"
           name="title"
-          defaultValue={""}
+          defaultValue={defaultValues?.title || ""}
           required
           placeholder="Enter Blog Title"
           className="w-full sm:w-[500px] p-2 border rounded-sm placeholder:text-[14px]"
@@ -134,7 +162,7 @@ export default function BlogForm() {
           id="category"
           name="category"
           required
-          defaultValue={""}
+          defaultValue={defaultValues?.category || ""}
           placeholder="Type category"
           className="w-full sm:w-[500px] p-2 border rounded-sm placeholder:text-[14px] "
         />
@@ -145,6 +173,7 @@ export default function BlogForm() {
         </label>
         <MDEditor
           value={value}
+          defaultValue={defaultValues?.content || ""}
           onChange={(val) => setValue(val as string)}
           data-color-mode="light"
           className="border"
@@ -163,6 +192,8 @@ export default function BlogForm() {
       >
         {isPending ? (
           <span className="size-6 block mx-auto border-2 border-r-black rounded-full animate-spin" />
+        ) : type === "edit" ? (
+          "Update Blog"
         ) : (
           "Add Blog"
         )}

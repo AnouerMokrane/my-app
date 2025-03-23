@@ -1,5 +1,5 @@
 "use server";
-import { revalidatePath } from "next/cache";
+import { revalidatePath, revalidateTag } from "next/cache";
 import { connectDB } from "./dbConnect";
 import { Post } from "./models/PostModel";
 import { Subscription } from "./models/SubscriptionModel";
@@ -45,6 +45,8 @@ export const createPost = async (post: BlogPost) => {
 
   try {
     await Post.create(post);
+    revalidatePath("/");
+    revalidatePath("/admin/blog-list");
     return {
       success: true,
       message: "Post created successfully",
@@ -63,6 +65,12 @@ export const updatePost = async (id: string, post: BlogPost) => {
 
   try {
     await Post.findByIdAndUpdate(id, post);
+    revalidatePath("/");
+    revalidatePath("/admin/blog-list");
+    return {
+      succuss: true,
+      message: "Post updated successfully",
+    };
   } catch (error) {
     console.log("Error updating post: ", error);
     return {
@@ -74,14 +82,30 @@ export const updatePost = async (id: string, post: BlogPost) => {
 
 export const deletePost = async (formData: FormData) => {
   const id = formData.get("id") as string;
-  console.log("id", id);
+  await connectDB();
+  try {
+    await Post.findByIdAndDelete(id);
+    revalidatePath("/admin/blog-list");
+    revalidatePath("/", "layout");
+    revalidateTag("posts");
+  } catch (error) {
+    console.log("Error deleting post: ", error);
+  }
 };
 export const subscribe = async (email: string) => {
   await connectDB();
 
+  const subscription = await Subscription.findOne({ email });
+  if (subscription) {
+    return {
+      success: false,
+      message: "Email already exists",
+    };
+  }
+
   try {
     await Subscription.create({ email });
-
+    revalidatePath("/admin/subscriptions");
     return {
       success: true,
       message: "Subscribed successfully",

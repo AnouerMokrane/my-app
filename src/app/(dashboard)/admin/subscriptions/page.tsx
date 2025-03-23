@@ -10,8 +10,8 @@ export default async function Page() {
   return (
     <>
       <h1 className="text-2xl font-medium mb-4">Subscriptions</h1>
-      <div className="overflow-x-auto max-w-4xl pb-22">
-        <table className="min-w-full table-auto bg-white border border-gray-200">
+      <div className="overflow-x-auto max-w-2xl max-h-[60vh] pb-2 custom-scrollbar border border-gray-400">
+        <table className="min-w-full  bg-white border border-gray-200">
           <thead>
             <tr className="bg-gray-200 text-gray-700 uppercase text-sm leading-normal">
               <th className="py-3 px-6 text-left">Email</th>
@@ -27,7 +27,7 @@ export default async function Page() {
                 <td className="py-3 px-6 text-left border-r border-gray-200">
                   {subscription.email}
                 </td>
-                <td className="py-3 px-6 text-left">
+                <td className="py-3 px-6 text-left w-20">
                   <DeleteSub email={subscription.email} />
                 </td>
               </tr>

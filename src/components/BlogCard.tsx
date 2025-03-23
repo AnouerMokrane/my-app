@@ -1,22 +1,12 @@
-import Image, { StaticImageData } from "next/image";
+import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 import { assets } from "../../public/Assets/assets";
+import { BlogPost } from "@/lib/types";
+import { marked } from "marked";
 
-export default function BlogCard({
-  blog_data,
-}: {
-  blog_data: {
-    _id: number;
-    title: string;
-    description: string;
-    image: StaticImageData;
-    date: number;
-    category: string;
-    author: string;
-    author_img: StaticImageData;
-  };
-}) {
+export default function BlogCard({ blog_data }: { blog_data: BlogPost }) {
+  const htmlContent = marked.parse(blog_data.content || "");
   return (
     <Link
       href={`/blogs/${blog_data._id}`}
@@ -35,9 +25,10 @@ export default function BlogCard({
         </span>
 
         <h2 className="text-lg mt-4">{blog_data.title} </h2>
-        <p className="text-gray-600 mt-2 line-clamp-3">
-          {blog_data.description}
-        </p>
+        <p
+          className="text-gray-600 mt-2 line-clamp-3"
+          dangerouslySetInnerHTML={{ __html: htmlContent }}
+        ></p>
         <div className="flex items-center gap-2 font-medium mt-4">
           Read more <Image src={assets.arrow} alt="arrow" width={15} />
         </div>
