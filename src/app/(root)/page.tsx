@@ -7,9 +7,9 @@ export default async function Home({
 }: {
   searchParams: Promise<{ category: string }>;
 }) {
- // const { category } = await searchParams;
-//  const currentCategory = category || "All";
-
+ const { category } = await searchParams;
+ const currentCategory = category || "All";
+console.log(category, currentCategory)
   return (
     <>
      <Hero />
