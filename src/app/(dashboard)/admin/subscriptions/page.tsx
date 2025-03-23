@@ -6,7 +6,6 @@ export default async function Page() {
   if (!subscriptions.data?.length) {
     return <h1 className="text-xl font-semibold">No Subscribers</h1>;
   }
-
   return (
     <>
       <h1 className="text-2xl font-medium mb-4">Subscriptions</h1>
