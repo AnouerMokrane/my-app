@@ -23,7 +23,7 @@ export default async function page({
 
   const blogDetails: BlogPost = data.data;
 
-  const htmlContent = marked.parse("");
+  const htmlContent = marked.parse(blogDetails.content || "");
 
   return (
     <>
