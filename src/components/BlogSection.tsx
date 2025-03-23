@@ -3,7 +3,7 @@ import BlogFilter from "./BlogFilter";
 import { BlogPost } from "@/lib/types";
 
 export default async function BlogSection({ category }: { category: string }) {
-  const res = await fetch(process.env.NEXT_PUBLIC_API_BASE_URL, {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/posts`, {
     next: {
       tags: ["posts"],
     },
