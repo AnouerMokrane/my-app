@@ -1,4 +1,3 @@
-import { getPosts } from "@/lib/actions";
 import { BlogPost } from "@/lib/types";
 import Link from "next/link";
 import React from "react";
@@ -8,17 +7,13 @@ export default async function BlogFilter({
 }: {
   currentCategory: string;
 }) {
-  const data = await getPosts();
+  const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/posts`, {
+    next: { revalidate: 0, tags: ["posts"] },
+  });
+  const data: BlogPost[] = await res.json();
+  if (!data.length) return;
 
-  if (!data.success) {
-    return <h1>No Posts Found</h1>;
-  }
-
-  const blog_data: BlogPost[] = data?.data || [];
-  const categories = [
-    "All",
-    ...new Set(blog_data.map((blog) => blog.category)),
-  ];
+  const categories = ["All", ...new Set(data.map((blog) => blog.category))];
   return (
     <div className="flex items-center gap-2 max-w-3xl overflow-x-auto py-2 px-4 custom-scrollbar mx-auto ">
       {categories.map((cat, index) => (

@@ -1,13 +1,19 @@
 import Link from "next/link";
-import { getPosts } from "@/lib/actions";
 import Image from "next/image";
 import { BlogPost } from "@/lib/types";
 import { assets } from "../../../../../public/Assets/assets";
 import DeleteBlog from "@/components/DeleteBlog";
 
 export default async function BlogsList() {
-  const posts = await getPosts();
-  if (!posts?.data?.length) {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/posts`, {
+    next: {
+      tags: ["posts"],
+      revalidate: 0,
+    },
+  });
+  const posts: BlogPost[] = await res.json();
+
+  if (!posts.length) {
     return (
       <>
         <h1 className="text-2xl font-semibold">No Blogs Found</h1>
@@ -32,7 +38,7 @@ export default async function BlogsList() {
             </tr>
           </thead>
           <tbody className="text-gray-600 text-sm font-light">
-            {posts?.data?.map((post: BlogPost) => (
+            {posts.map((post) => (
               <tr
                 key={post._id}
                 className="border-b border-gray-200 hover:bg-gray-100"

@@ -5,24 +5,6 @@ import { Post } from "./models/PostModel";
 import { Subscription } from "./models/SubscriptionModel";
 import { BlogPost } from "./types";
 
-export const getPosts = async () => {
-  await connectDB();
-
-  try {
-    const posts = await Post.find();
-    return {
-      success: true,
-      data: posts,
-    };
-  } catch (error) {
-    console.error("Error getting posts: ", error);
-    return {
-      success: false,
-      message: "Error getting posts",
-    };
-  }
-};
-
 export const getPostById = async (id: string) => {
   await connectDB();
   try {
@@ -45,8 +27,9 @@ export const createPost = async (post: BlogPost) => {
 
   try {
     await Post.create(post);
-    revalidatePath("/");
     revalidatePath("/admin/blog-list");
+    revalidatePath("/");
+    revalidateTag("posts");
     return {
       success: true,
       message: "Post created successfully",
@@ -65,8 +48,9 @@ export const updatePost = async (id: string, post: BlogPost) => {
 
   try {
     await Post.findByIdAndUpdate(id, post);
-    revalidatePath("/");
     revalidatePath("/admin/blog-list");
+    revalidatePath("/");
+    revalidateTag("posts");
     return {
       succuss: true,
       message: "Post updated successfully",
@@ -86,7 +70,7 @@ export const deletePost = async (formData: FormData) => {
   try {
     await Post.findByIdAndDelete(id);
     revalidatePath("/admin/blog-list");
-    revalidatePath("/", "layout");
+    revalidatePath("/");
     revalidateTag("posts");
   } catch (error) {
     console.log("Error deleting post: ", error);
@@ -106,6 +90,7 @@ export const subscribe = async (email: string) => {
   try {
     await Subscription.create({ email });
     revalidatePath("/admin/subscriptions");
+    revalidateTag("subscribers");
     return {
       success: true,
       message: "Subscribed successfully",
@@ -119,31 +104,13 @@ export const subscribe = async (email: string) => {
   }
 };
 
-export const getSubscriptions = async () => {
-  await connectDB();
-
-  try {
-    const subscriptions = await Subscription.find();
-    return {
-      success: true,
-      data: subscriptions,
-    };
-  } catch (error) {
-    console.error("Error getting subscriptions: ", error);
-    return {
-      success: false,
-      message: "Error getting subscriptions",
-    };
-  }
-};
-
 export const deleteSubscription = async (formData: FormData): Promise<void> => {
   const email = formData.get("email");
   await connectDB();
   try {
     await Subscription.findOneAndDelete({ email: email });
-    revalidatePath("admin/subscriptions");
-    revalidatePath("/");
+    revalidatePath("/admin/subscriptions");
+    revalidateTag("subscribers");
   } catch (error) {
     console.error(error);
   }

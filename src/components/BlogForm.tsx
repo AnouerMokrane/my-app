@@ -77,8 +77,12 @@ export default function BlogForm({
 
         if (res.success) {
           toast.success(res.message);
+          setImage(null);
+          setValue("");
         } else {
           toast.error(res.message);
+          setImage(null);
+          setValue("");
         }
       } else {
         const res = await updatePost(id as string, {
@@ -99,6 +103,7 @@ export default function BlogForm({
       }
     } catch (error) {
       setImage(null);
+      setValue("");
       console.log(error);
     }
   };

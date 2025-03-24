@@ -1,9 +1,16 @@
 import DeleteSub from "@/components/DeleteSub";
-import { getSubscriptions } from "@/lib/actions";
+import { ISUb } from "@/lib/types";
 
 export default async function Page() {
-  const subscriptions = await getSubscriptions();
-  if (!subscriptions.data?.length) {
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/subscribers`,
+    {
+      next: { revalidate: 0, tags: ["subscribers"] },
+    }
+  );
+  const subscriptions: ISUb[] = await res.json();
+
+  if (!subscriptions.length) {
     return <h1 className="text-xl font-semibold">No Subscribers</h1>;
   }
   return (
@@ -18,9 +25,9 @@ export default async function Page() {
             </tr>
           </thead>
           <tbody className="text-gray-600 text-sm font-light">
-            {subscriptions?.data?.map((subscription) => (
+            {subscriptions.map((subscription) => (
               <tr
-                key={subscription.id}
+                key={subscription._id}
                 className="border-b border-gray-200 hover:bg-gray-100"
               >
                 <td className="py-3 px-6 text-left border-r border-gray-200">
