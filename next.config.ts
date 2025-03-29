@@ -3,7 +3,20 @@ import type { NextConfig } from "next";
 const nextConfig: NextConfig = {
   /* config options here */
   images: {
-    domains: ["img.clerk.com", "peach-fashionable-sawfish-519.mypinata.cloud"],
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "img.clerk.com",
+        port: "",
+        pathname: "/**",
+      },
+      {
+        protocol: "https",
+        hostname: "peach-fashionable-sawfish-519.mypinata.cloud",
+        port: "",
+        pathname: "/**",
+      },
+    ],
   },
 };
 

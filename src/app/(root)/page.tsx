@@ -7,12 +7,11 @@ export default async function Home({
 }: {
   searchParams: Promise<{ category: string }>;
 }) {
- const { category } = await searchParams;
- const currentCategory = category || "All";
-console.log(category, currentCategory)
+  const { category } = await searchParams;
+  const currentCategory = category || "All";
   return (
     <>
-     <Hero />
+      <Hero />
       <Suspense
         fallback={
           <div className="flex  justify-center h-[calc(100dvh-(150px+81px))] sm:h-[calc(100dvh-(150px+150px))]pt-28">

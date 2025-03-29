@@ -5,8 +5,12 @@ export type BlogPost = {
   category: string;
   image: string;
   date: number;
-  author: string;
-  author_img: string;
+  author: {
+    id: string;
+    name: string;
+    email: string;
+    author_img: string;
+  };
 };
 
 export type ISUb = {

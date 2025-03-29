@@ -29,6 +29,7 @@ export const createPost = async (post: BlogPost) => {
     await Post.create(post);
     revalidatePath("/admin/blog-list");
     revalidatePath("/");
+    revalidatePath("/api/posts");
     revalidateTag("posts");
     return {
       success: true,

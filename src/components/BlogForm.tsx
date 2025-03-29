@@ -71,8 +71,12 @@ export default function BlogForm({
           image: formValues.image as string,
           content: value,
           date: Date.now(),
-          author: user.fullName as string,
-          author_img: user.imageUrl as string,
+          author: {
+            id: user.id,
+            name: user.fullName as string,
+            email: user.emailAddresses[0].emailAddress,
+            author_img: user.imageUrl as string,
+          },
         });
 
         if (res.success) {
@@ -91,8 +95,12 @@ export default function BlogForm({
           image: formValues.image as string,
           content: value,
           date: Date.now(),
-          author: user.fullName as string,
-          author_img: user.imageUrl as string,
+          author: {
+            id: user.id,
+            name: user.fullName as string,
+            email: user.emailAddresses[0].emailAddress,
+            author_img: user.imageUrl as string,
+          },
         });
 
         if (res.succuss) {

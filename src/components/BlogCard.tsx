@@ -25,10 +25,10 @@ export default function BlogCard({ blog_data }: { blog_data: BlogPost }) {
         </span>
 
         <h2 className="text-lg mt-4">{blog_data.title} </h2>
-        <p
+        <div
           className="text-gray-600 mt-2 line-clamp-3"
           dangerouslySetInnerHTML={{ __html: htmlContent }}
-        ></p>
+        ></div>
         <div className="flex items-center gap-2 font-medium mt-4">
           Read more <Image src={assets.arrow} alt="arrow" width={15} />
         </div>

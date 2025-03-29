@@ -34,13 +34,13 @@ export default async function page({
           </h1>
           <div className="flex items-center flex-col gap-1 mt-3">
             <Image
-              src={blogDetails.author_img || ""}
-              alt={blogDetails.author || "Author"}
+              src={blogDetails.author.author_img || ""}
+              alt={blogDetails.author.name || "Author"}
               width={60}
               height={60}
               className="border border-white rounded-full"
             />
-            <p className="text-gray-700">{blogDetails.author}</p>
+            <p className="text-gray-700">{blogDetails.author.name}</p>
           </div>
         </div>
       </div>

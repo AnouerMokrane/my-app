@@ -1,7 +1,26 @@
 import DeleteSub from "@/components/DeleteSub";
 import { ISUb } from "@/lib/types";
+import { auth } from "@clerk/nextjs/server";
 
 export default async function Page() {
+  const { sessionClaims } = await auth();
+  if (!sessionClaims) {
+    return <h1 className="text-xl font-semibold">Unauthorized</h1>;
+  }
+  if (sessionClaims.metadata.role !== "admin") {
+    return (
+      <>
+        <h1 className="text-xl font-semibold">Unauthorized</h1>
+        <p className="text-sm text-gray-500">
+          You are not authorized to view this page.
+        </p>
+        <p className="text-sm text-gray-500">
+          Please contact the admin if you think this is a mistake.
+        </p>
+      </>
+    );
+  }
+
   const res = await fetch(
     `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/subscribers`,
     {

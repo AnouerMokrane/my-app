@@ -1,9 +1,20 @@
 "use client";
 
 import { deletePost } from "@/lib/actions";
+import { useUser } from "@clerk/nextjs";
 import { useFormStatus } from "react-dom";
 
-export default function DeleteBlog({ id }: { id: string }) {
+export default function DeleteBlog({
+  id,
+  authorId,
+}: {
+  id: string;
+  authorId: string;
+}) {
+  const { user } = useUser();
+  if (user?.id !== authorId) {
+    return null;
+  }
   return (
     <form action={deletePost}>
       <input type="text" name="id" hidden readOnly value={JSON.parse(id)} />

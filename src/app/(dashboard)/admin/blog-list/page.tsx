@@ -3,22 +3,21 @@ import Image from "next/image";
 import { BlogPost } from "@/lib/types";
 import { assets } from "../../../../../public/Assets/assets";
 import DeleteBlog from "@/components/DeleteBlog";
+import { auth } from "@clerk/nextjs/server";
+import { Post } from "@/lib/models/PostModel";
 
 export default async function BlogsList() {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/posts`, {
-    next: {
-      tags: ["posts"],
-      revalidate: 0,
-    },
+  const { userId } = await auth();
+  const posts: BlogPost[] = await Post.find({
+    "author.id": userId,
   });
-  const posts: BlogPost[] = await res.json();
 
   if (!posts.length) {
     return (
       <>
-        <h1 className="text-2xl font-semibold">No Blogs Found</h1>
+        <h1 className="text-2xl font-semibold">You have no blogs</h1>
         <Link href="/admin/add-blog">
-          <span className="text-sm underline">Add Blog</span>
+          <span className="text-sm underline">Add your first blog</span>
         </Link>
       </>
     );
@@ -47,13 +46,13 @@ export default async function BlogsList() {
                 <td className="py-3 px-6 text-left ">{post.category}</td>
                 <td className="flex items-center gap-2 py-3 px-6 text-left ">
                   <Image
-                    src={post.author_img || assets.profile_icon}
+                    src={post.author.author_img || assets.profile_icon}
                     alt=""
                     width={40}
                     height={40}
                     className="size-10 object-cover rounded-full"
                   />
-                  {post.author}
+                  {post.author.name}
                 </td>
                 <td className="py-3 px-6 text-left w-[100px]    ">
                   <div className="flex space-x-2">
@@ -63,7 +62,10 @@ export default async function BlogsList() {
                     >
                       Edit
                     </Link>
-                    <DeleteBlog id={JSON.stringify(post._id)} />
+                    <DeleteBlog
+                      id={JSON.stringify(post._id)}
+                      authorId={post.author.id}
+                    />
                   </div>
                 </td>
               </tr>
