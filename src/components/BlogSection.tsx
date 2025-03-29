@@ -8,6 +8,8 @@ export default async function BlogSection({ category }: { category: string }) {
       tags: ["posts"],
     },
   });
+
+  console.log(res);
   const posts: BlogPost[] = await res.json();
 
   const filtredBlogs =

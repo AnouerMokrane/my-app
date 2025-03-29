@@ -12,6 +12,8 @@ export default async function BlogsList() {
     "author.id": userId,
   });
 
+  console.log(posts);
+
   if (!posts.length) {
     return (
       <>
