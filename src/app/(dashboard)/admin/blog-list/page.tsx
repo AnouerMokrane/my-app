@@ -62,10 +62,7 @@ export default async function BlogsList() {
                     >
                       Edit
                     </Link>
-                    <DeleteBlog
-                      id={JSON.stringify(post._id)}
-                      authorId={post.author.id}
-                    />
+                    <DeleteBlog id={JSON.stringify(post._id)} />
                   </div>
                 </td>
               </tr>
