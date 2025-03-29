@@ -1,8 +1,9 @@
 "use client";
-export default function error() {
+export default function error({ error }: { error: Error }) {
   return (
-    <div>
-      <h1>Somthing went wront</h1>
+    <div className="min-h-screen flex flex-col items-center">
+      <h1 className="text-3xl font-bold">{error.message}</h1>
+      <p className="text-xl">Something went wrong</p>
     </div>
   );
 }
