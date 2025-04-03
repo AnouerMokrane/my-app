@@ -13,9 +13,6 @@ export default async function BlogsList() {
   const posts: BlogPost[] = await Post.find({
     "author.id": userId,
   });
-
-  console.log(posts);
-
   if (!posts.length) {
     return (
       <>
@@ -43,7 +40,7 @@ export default async function BlogsList() {
           <tbody className="text-gray-600 text-sm font-light">
             {posts.map((post) => (
               <tr
-                key={post._id}
+                key={post._id as string}
                 className="border-b border-gray-200 hover:bg-gray-100"
               >
                 <td className="py-3 px-6 text-left">{post.title}</td>
