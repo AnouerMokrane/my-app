@@ -5,9 +5,11 @@ import { assets } from "../../../../../public/Assets/assets";
 import DeleteBlog from "@/components/DeleteBlog";
 import { auth } from "@clerk/nextjs/server";
 import { Post } from "@/lib/models/PostModel";
+import { connectDB } from "@/lib/dbConnect";
 
 export default async function BlogsList() {
   const { userId } = await auth();
+  await connectDB();
   const posts: BlogPost[] = await Post.find({
     "author.id": userId,
   });

@@ -1,4 +1,6 @@
 import DeleteSub from "@/components/DeleteSub";
+import { connectDB } from "@/lib/dbConnect";
+import { Subscription } from "@/lib/models/SubscriptionModel";
 import { ISUb } from "@/lib/types";
 import { auth } from "@clerk/nextjs/server";
 
@@ -20,14 +22,9 @@ export default async function Page() {
       </>
     );
   }
+  await connectDB();
 
-  const res = await fetch(
-    `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/subscribers`,
-    {
-      next: { revalidate: 0, tags: ["subscribers"] },
-    }
-  );
-  const subscriptions: ISUb[] = await res.json();
+  const subscriptions: ISUb[] = await Subscription.find();
 
   if (!subscriptions.length) {
     return <h1 className="text-xl font-semibold">No Subscribers</h1>;
