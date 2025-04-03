@@ -11,7 +11,6 @@ export type BlogPost = {
     email: string;
     author_img: string;
   };
-  __v: number;
 };
 
 export type ISUb = {
