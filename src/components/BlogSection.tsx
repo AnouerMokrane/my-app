@@ -1,12 +1,11 @@
 import { Post } from "@/lib/models/PostModel";
 import BlogCard from "./BlogCard";
 import BlogFilter from "./BlogFilter";
-import { BlogPost } from "@/lib/types";
 import { connectDB } from "@/lib/dbConnect";
 
 export default async function BlogSection({ category }: { category: string }) {
   await connectDB();
-  const posts: BlogPost[] = await Post.find().sort({ createdAt: -1 });
+  const posts = await Post.find();
 
   const filtredBlogs =
     category === "All"

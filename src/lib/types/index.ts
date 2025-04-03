@@ -1,5 +1,5 @@
 export type BlogPost = {
-  _id?: number;
+  _id?: string | unknown;
   title: string;
   content: string;
   category: string;
@@ -11,6 +11,7 @@ export type BlogPost = {
     email: string;
     author_img: string;
   };
+  __v: number;
 };
 
 export type ISUb = {

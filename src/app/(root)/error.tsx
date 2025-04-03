@@ -1,9 +1,10 @@
 "use client";
-export default function error({ error }: { error: Error }) {
+
+export default function Error({ error }: { error: Error }) {
   return (
-    <div className="min-h-[83vh] flex flex-col items-center pt-22 text-center">
-      <h1 className="text-3xl font-bold">{error.message}</h1>
-      <p className="text-xl">Something went wrong</p>
+    <div className="h-[80vh] flex flex-col justify-center items-center text-red-500 p-4">
+      <h2 className="text-2xl">Error fetching blogs</h2>
+      <p>{error.message}</p>
     </div>
   );
 }
